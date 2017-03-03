@@ -1,0 +1,366 @@
+@import "normalize";
+@import "skeleton";
+@import "leaflet";
+@import "react-select";
+@import "responsive";
+
+$green: #389e46;
+$green1: $green;
+$green2: rgb(85,192,95);
+$green3: rgb(101,227,112);
+$gray1: rgb(74,76,73);
+$gray2: rgb(108,112,108);
+$gray3: rgb(143,149,142);
+$gray4: rgb(178,185,177);
+$gray5: rgb(180,194,181);
+$gray-border: rgb(213,212,212);
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background: rgb(234,233,233);
+}
+
+#map {
+    margin-bottom: 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    z-index: -2;
+    .leaflet-control-container {
+        display: none;
+    }
+    .leaflet-popup-content {
+        font: 12px/1.5 'Roboto', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+}
+
+.container {
+    // transition: all 4s ease-in-out;
+    position: fixed;
+    margin: 0 auto;
+
+    background: #fff;
+    border-top: 1px solid $gray-border;
+    box-shadow: 0 0px 3px rgba(108,112,108, 0.5);
+
+    padding: 0;
+
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    width: 960px;
+    max-width: 100%;
+
+    overflow: hidden;
+
+    .container-content {
+        padding: 15px 25px 100px;
+        max-height: 100%;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    &.up {
+        top: 48px;
+        .park-count {
+            // background: $green;
+            // background: rgb(244,245,245);
+            border-bottom: 1px solid rgb(233, 235, 235);
+            .count {
+                // color: #fff;
+            }
+        }
+    }
+}
+
+.park-count {
+    padding: 10px 10px;
+    display: flex;
+    transition: background 0.1s ease-in, color 0.1s ease-in;
+
+    .chevron {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+        padding: 0;
+        padding-top: 2px;
+        padding-right: 2px;
+        text-align: center;
+        cursor: pointer;
+        path { fill: $green; }
+        &.down {
+            transform: rotate(0deg);
+        }
+        &.up {
+            transform: rotate(-180deg);
+        }
+    }
+    .count {
+        font-size: 1.2em;
+        font-weight: 400;
+        color: $gray2;
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.parks-list {
+    .park-count {
+        color: $green;
+        text-align: center;
+    }
+    .park-distance {
+        text-align: left;
+        color: $gray3;
+        @include tablet-desktop {
+            text-align: right;
+        }
+    }
+    .park-list-item {
+        margin: 5px 0;
+        .park-name {
+            span {
+                text-decoration: underline;
+                cursor: pointer;
+                &:hover {
+                    color: $green;
+                }
+            }
+        }
+    }
+}
+
+h4 {
+    margin-top: 1em;
+}
+
+.park-feature-list {
+    .feature-list-item {
+        margin-bottom: 15px;
+        word-break: break-word;
+        .feature-details {
+            display: table-cell;
+            width: 100%;
+            line-height: 1.5em;
+            .long-text, .short-text {
+                display: inline-block;
+                vertical-align: middle;
+            }
+            .long-text {
+                float: left;
+                width: 70%;
+                @include phone {
+                    width: 100%;
+                    float: initial;
+                }
+            }
+            .short-text {
+                float: right;
+                text-align: right;
+                width: 30%;
+                @include phone {
+                    width: 100%;
+                    text-align: left;
+                    float: initial;
+                }
+            }
+            .feature-name {
+                color: $green1;
+                display: block;
+                font-weight: 500;
+                text-decoration: underline;
+                &:hover {
+                    color: $green2;
+                }
+            }
+            .feature-description {
+                color: $gray2;
+                display: block;
+            }
+            .feature-type, .feature-accessible {
+                color: $gray3;
+                margin-right: 10px;
+                display: block;
+            }
+        }
+        .feature-icon {
+            display: table-cell;
+            vertical-align: top;
+            text-align: center;
+            padding-right: 20px;
+            padding-top: 8px;
+            img {
+                margin-top: 2px;
+                vertical-align: middle;
+                height: 18px;
+                width: 18px;
+            }
+            .icon {
+                width: 30px;
+                height: 30px;
+                border-radius: 15px;
+                background: rgb(234,233,233);
+                border: 1px solid $gray5;
+                &:hover {
+                    border: 2px solid $green2;
+                    img {
+                        margin-top: 0px;
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+.park-filters {
+    display: flex;
+    flex: 1;
+}
+
+.navigation {
+    width: 960px;
+    max-width: 100%;
+    box-shadow: 0 1px 4px rgba(80, 112, 80, 0.4);
+    left: 50%;
+    transform: translate(-50%, 0);
+    height: 49px;
+
+    display: flex;
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    background: #fff;
+    text-align: left;
+    padding: 5px;
+    border-top: none;
+    flex: 1;
+
+    .logo {
+        padding-top: 3px;
+        width: 35px;
+        height: 24px;
+    }
+    h1 {
+        cursor: pointer;
+        margin: 0 5px;
+        font-size: 1.3em;
+        letter-spacing: 0;
+        font-weight: 400;
+        color: $gray2;
+        display: flex;
+        align-items: center;
+    }
+
+    .Select {
+        flex: 1;
+        .Select-control { padding: 0; }
+    }
+    .filter-icons {
+        display: inline-block;
+    }
+    .icon {
+        padding: 0 5px;
+        border-radius: 5px;
+        margin: 0;
+        margin-left: 5px;
+        img {
+            vertical-align: middle;
+            height: 24px;
+            width: 24px;
+            opacity: 0.7;
+        }
+        &:hover, &:focus{
+            img { opacity: 0.8; }
+            border-color: $green1;
+            background: $green1;
+        }
+        &:active, &.active {
+            border-color: $green3;
+            background: $green3;
+            img { opacity: 1; }
+        }
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+.nav {
+    padding-top: 20px;
+    text-align: center;
+    @include phone {
+        display: none;
+    }
+}
+
+.logo {
+    margin-bottom: 10px;
+    display: block;
+    img {
+        height: 30px;
+    }
+    h1 {
+        display: inline-block;
+        font-size: 30px;
+        color: $gray2;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+}
+
+.address {
+    text-align: right;
+}
+
+.u-clickable {
+    cursor: pointer;
+}
+a {
+    cursor: pointer;
+    &:hover {
+        color: $green;
+    }
+}
+
+.loading {
+    font-family: Arial;
+    top: 10vh;
+    padding: 10px 0;
+    width: 300px;
+    position: relative;
+    margin: 0 auto;
+    color: $green;
+    text-align: center;
+    font-size: 30px;
+}
+
+.leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow {
+    -webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
+    -moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+    -o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+}
+
+.park-label {
+    width: 80px !important;
+    margin-left: -40px !important;
+    text-align: center;
+    display: block;
+    height: 1000px;
+    text-shadow: 0px 0px 4px #fff;
+
+}
