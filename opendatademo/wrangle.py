@@ -18,13 +18,13 @@ with open('311data.csv') as inf:
 	# schema: {zip: average time}
 	avg_zipcode_times = {}
 	for row in data:
-		lat = lon = None
+		lat = lon = None	
 		try:
-			# lat = float(row['Latitude Coordinate'])
-			# lon = float(row['Longitude Coordinate'])
 			zipc = row['Zip Code']
 			if not zipc:
 				continue
+			else:
+				zipc = int(zipc)
 			
 			# extract date_changed
 			# TODO: demo looking at python datetime module
@@ -32,7 +32,6 @@ with open('311data.csv') as inf:
 			temp = row['Status Change Date']
 			date_changed = datetime.strptime(row['Status Change Date'], \
 											'%m/%d/%Y %I:%M:%S %p')
-			# print(date_changed)
 
 			# extract date_created
 			date_created = datetime.strptime(row['Created Date'], \
@@ -53,7 +52,7 @@ with open('311data.csv') as inf:
 
 	print('Creating map... showing avg per zip code')
 	for zipc, avg in avg_zipcode_times.items():
-		latlong = zcdb[int(zipc)]
+		latlong = zcdb[zipc]
 		folium.Marker([latlong.latitude, latlong.longitude], popup=str(avg)).add_to(map_zipAvg)
 		print(zipc, avg)
 
