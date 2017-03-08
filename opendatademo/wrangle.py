@@ -17,13 +17,17 @@ with open('311data.csv', 'r') as inf:
 			temp = row['Status Change Date']
 			date_changed = datetime.strptime(row['Status Change Date'], \
 											'%m/%d/%Y %I:%M:%S %p')
-			print(date_changed)
+			# print(date_changed)
 
 			# extract date_created
 			date_created = datetime.strptime(row['Created Date'], \
 											'%m/%d/%Y %I:%M:%S %p')
 
-			print(lat, lon, date_created, date_changed)
+			# TODO: lookup datetime subtract
+			# https://docs.python.org/3/library/datetime.html#timedelta-objects
+			# Sanity check for total_seconds() method
+			response_time = date_changed - date_created
+			# print(response_time.total_seconds())
 			
 		except Exception as e:
 			print(e)
