@@ -31,8 +31,12 @@ with open('311data.csv', 'r') as inf:
 			# Sanity check for total_seconds() method
 			response_time = (date_changed - date_created).total_seconds()
 
-			prev_time = avg_zipcode_times[zipc]
-			avg_zipcode_times = (prev_time + response_time) / 2
-			
+			if zipc in avg_zipcode_times:
+				avg_zipcode_times[zipc] = (avg_zipcode_times[zipc] + response_time) / 2
+			else:
+				avg_zipcode_times[zipc] = response_time
+
 		except Exception as e:
 			print(e)
+
+	print(avg_zipcode_times)
