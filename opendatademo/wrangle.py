@@ -5,11 +5,14 @@ from datetime import datetime
 with open('311data.csv', 'r') as inf:
 	data = csv.DictReader(inf)
 
+	# schema: {zip: average time}
+	avg_zipcode_times = {}
 	for row in data:
 		lat = lon = None
 		try:
-			lat = float(row['Latitude Coordinate'])
-			lon = float(row['Longitude Coordinate'])
+			# lat = float(row['Latitude Coordinate'])
+			# lon = float(row['Longitude Coordinate'])
+			zipc = row['Zip Code']
 			
 			# extract date_changed
 			# TODO: demo looking at python datetime module
@@ -26,8 +29,10 @@ with open('311data.csv', 'r') as inf:
 			# TODO: lookup datetime subtract
 			# https://docs.python.org/3/library/datetime.html#timedelta-objects
 			# Sanity check for total_seconds() method
-			response_time = date_changed - date_created
-			# print(response_time.total_seconds())
+			response_time = (date_changed - date_created).total_seconds()
+
+			prev_time = avg_zipcode_times[zipc]
+			avg_zipcode_times = (prev_time + response_time) / 2
 			
 		except Exception as e:
 			print(e)
