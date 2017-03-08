@@ -47,11 +47,11 @@ for incident in data:
 		# extract date_created
 		date_created = datetime.strptime(incident.get("sr_created_date"), \
 										'%Y-%m-%dT%H:%M:%S.%f')
-
 		# TODO: lookup datetime subtract
 		# https://docs.python.org/3/library/datetime.html#timedelta-objects
 		# Sanity check for total_seconds() method
 		response_time = (date_changed - date_created).total_seconds()
+		response_time = (((response_time/60)/60)/24)
 
 		if zipc in avg_zipcode_times:
 			avg_zipcode_times[zipc] = (avg_zipcode_times[zipc] + response_time) / 2
@@ -64,8 +64,9 @@ print('Number of entries:%d' % incident_count)
 print('Creating map... showing avg per zip code')
 for zipc, avg in avg_zipcode_times.items():
 	latlong = zcdb[zipc]
-	folium.Marker([latlong.latitude, latlong.longitude], popup=str(avg)).add_to(map_zipAvg)
-	print(zipc, avg)
+	label = ("Average Response = '{0}' days").format(avg)
+	folium.Marker([latlong.latitude, latlong.longitude], popup=str(label)).add_to(map_zipAvg)
+	print("The average response time in '{0}' is '{1}' days").format(zipc, avg)
 
 print('Saving to html map...')
 map_zipAvg.save('zipPlot.html')
