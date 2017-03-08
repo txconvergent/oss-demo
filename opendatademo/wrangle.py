@@ -1,6 +1,15 @@
 import csv
 import re
 from datetime import datetime
+import folium
+
+# clone pyzipcode from https://github.com/invernizzi/pyzipcode
+# And run `pip install -e` from this repo folder.
+# The repo in standard `pip install ...` db does not work with python 3.
+from pyzipcode import ZipCodeDatabase
+zcdb = ZipCodeDatabase()
+
+map_zipAvg = folium.Map(location=[30.288009, -97.739133])
 
 with open('311data.csv', 'r') as inf:
 	data = csv.DictReader(inf)
@@ -39,4 +48,12 @@ with open('311data.csv', 'r') as inf:
 		except Exception as e:
 			print(e)
 
-	print(avg_zipcode_times)
+	for zipc, avg in avg_zipcode_times.items():
+		if not zipc:
+			continue # zipc can be an empty string
+
+		latlong = zcdb[int(zipc)]
+		folium.Marker([latlong.latitude, latlong.longitude], popup=str(avg)).add_to(map_zipAvg)
+		print(zipc, avg)
+
+map_zipAvg.save('zipPlot.html')
